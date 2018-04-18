@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.daveamit.hello";
+option java_outer_classname = "hello";
+
+package test;
+
+// Interface exported by the server.
+service Hello {
+  // SayHi takes in a name and returns hello message
+  rpc SayHi(SayHiRequest) returns (SayHiResponse) {}
+}
+
+
+// This is to simulate Recursion
+message P {
+  C cFromP = 1;
+}
+
+message C {
+  P pFromC = 1;
+}
+ 
+// SayHiRequest takes in a name 
+message SayHiRequest {
+  string name = 1;
+  P p = 2;
+}
+
+// SayHiResponse takes in a name
+message SayHiResponse {
+  string message = 1;
+}
