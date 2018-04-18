@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/gojp/goreportcard)](https://goreportcard.com/report/gojp/goreportcard) 
+[![Go Report Card](https://goreportcard.com/badge/gojp/goreportcard)](https://goreportcard.com/report/gojp/goreportcard) [![CircleCI](https://circleci.com/gh/daveamit/crazytalk/tree/master.svg?style=svg)](https://circleci.com/gh/daveamit/crazytalk/tree/master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/daveamit/crazytalk/blob/master/LICENSE)
 # crazy-talk
 `Crazy-Talk` is a simple wrapper which provides a simple and straight forward JSON based API over `github.com/jhump/protoreflect`
