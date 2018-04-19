@@ -3,6 +3,7 @@ package crazytalk
 import (
 	"context"
 
+	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/dynamic/grpcdynamic"
 
 	"github.com/jhump/protoreflect/grpcreflect"
@@ -14,6 +15,7 @@ import (
 // (using google.golang.org/grpc/reflection/grpc_reflection_v1alpha)
 // Implementation for CrazyTalk
 type ReflectiveCrazyTalk struct {
+	memCache
 	client *grpcreflect.Client
 	stub   *grpcdynamic.Stub
 }
@@ -31,7 +33,11 @@ func NewReflectionCrazyTalk(url string) *ReflectiveCrazyTalk {
 	rStub := reflect.NewServerReflectionClient(cc)
 	client := grpcreflect.NewClient(context.Background(), rStub)
 	stub := grpcdynamic.NewStub(cc)
-	return &ReflectiveCrazyTalk{client: client, stub: &stub}
+
+	ct := &ReflectiveCrazyTalk{client: client, stub: &stub}
+	ct.methodMap = make(map[string]*desc.MethodDescriptor)
+	ct.typeMap = make(map[string]Type)
+	return ct
 }
 
 // ListServices returns parsed "static" structure for services implemented
@@ -52,7 +58,7 @@ func (r *ReflectiveCrazyTalk) ListServices() ([]Service, error) {
 				return nil, err
 			}
 
-			svcs = append(svcs, NewService(s))
+			svcs = append(svcs, NewService(r, s))
 		}
 	}
 

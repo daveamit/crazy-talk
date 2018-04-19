@@ -16,20 +16,14 @@ type Method struct {
 	OutputType         Type
 }
 
-var methodMap map[string]*desc.MethodDescriptor
-
-func init() {
-	methodMap = make(map[string]*desc.MethodDescriptor)
-}
-
 // NewMethod takes in Method descriptor and parses it to
 // Simpler structs
-func NewMethod(m *desc.MethodDescriptor) (method Method) {
+func NewMethod(c cache, m *desc.MethodDescriptor) (method Method) {
 	method.Name = m.GetName()
 	method.FullyQualifiedName = m.GetFullyQualifiedName()
-	method.InputType = NewType(m.GetInputType())
-	method.OutputType = NewType(m.GetOutputType())
-	methodMap[method.FullyQualifiedName] = m
+	method.InputType = NewType(c, m.GetInputType())
+	method.OutputType = NewType(c, m.GetOutputType())
+	c.setMethod(method.FullyQualifiedName, m)
 	return
 }
 
@@ -37,7 +31,7 @@ func NewMethod(m *desc.MethodDescriptor) (method Method) {
 // Provide string FullyQualifiedName of the RPC and associated
 // JSON Payload.
 func (r ReflectiveCrazyTalk) InvokeRPC(rpc string, JSONPayload string) (JSONResponse string, err error) {
-	method, ok := methodMap[rpc]
+	method, ok := r.getMethod(rpc)
 
 	if !ok {
 		return "", errors.New("RPC not found")

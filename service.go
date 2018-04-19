@@ -13,11 +13,11 @@ type Service struct {
 
 // NewService takes in Service descriptor and parses it to
 // Simpler structs
-func NewService(svc *desc.ServiceDescriptor) (service Service) {
+func NewService(c cache, svc *desc.ServiceDescriptor) (service Service) {
 	service.Name = svc.GetName()
 	service.FullyQualifiedName = svc.GetFullyQualifiedName()
 	for _, method := range svc.GetMethods() {
-		service.Methods = append(service.Methods, NewMethod(method))
+		service.Methods = append(service.Methods, NewMethod(c, method))
 	}
 	return
 }
