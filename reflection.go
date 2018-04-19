@@ -10,14 +10,17 @@ import (
 	reflect "google.golang.org/grpc/reflection/grpc_reflection_v1alpha"
 )
 
-type rCrazyTalk struct {
+// ReflectiveCrazyTalk is "Reflection Based"
+// (using google.golang.org/grpc/reflection/grpc_reflection_v1alpha)
+// Implementation for CrazyTalk
+type ReflectiveCrazyTalk struct {
 	client *grpcreflect.Client
 	stub   *grpcdynamic.Stub
 }
 
 // NewReflectionCrazyTalk initializes and returns new
 // Reflection CrazyTalk instance
-func NewReflectionCrazyTalk(url string) CrazyTalk {
+func NewReflectionCrazyTalk(url string) *ReflectiveCrazyTalk {
 	addr := url
 	cc, err := grpc.Dial(addr, grpc.WithInsecure())
 
@@ -28,10 +31,12 @@ func NewReflectionCrazyTalk(url string) CrazyTalk {
 	rStub := reflect.NewServerReflectionClient(cc)
 	client := grpcreflect.NewClient(context.Background(), rStub)
 	stub := grpcdynamic.NewStub(cc)
-	return &rCrazyTalk{client: client, stub: &stub}
+	return &ReflectiveCrazyTalk{client: client, stub: &stub}
 }
 
-func (r *rCrazyTalk) ListServices() ([]Service, error) {
+// ListServices returns parsed "static" structure for services implemented
+// by connected GRPC server
+func (r *ReflectiveCrazyTalk) ListServices() ([]Service, error) {
 	list, err := r.client.ListServices()
 
 	if err != nil {

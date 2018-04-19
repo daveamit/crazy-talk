@@ -33,7 +33,10 @@ func NewMethod(m *desc.MethodDescriptor) (method Method) {
 	return
 }
 
-func (r rCrazyTalk) InvokeRPC(rpc string, JSONPayload string) (JSONResponse string, err error) {
+// InvokeRPC provides "simple" way to invoke an RPC,
+// Provide string FullyQualifiedName of the RPC and associated
+// JSON Payload.
+func (r ReflectiveCrazyTalk) InvokeRPC(rpc string, JSONPayload string) (JSONResponse string, err error) {
 	method, ok := methodMap[rpc]
 
 	if !ok {
